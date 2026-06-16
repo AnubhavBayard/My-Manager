@@ -1,0 +1,44 @@
+# =========================
+# Backend
+# =========================
+
+backend/venv/
+backend/__pycache__/
+backend/uploads/
+backend/chroma_db/
+backend/.env
+
+*.pyc
+*.pyo
+
+# PaddleOCR / PaddleX caches
+.paddleocr/
+.paddlex/
+
+# =========================
+# Frontend (Vite)
+# =========================
+
+local-rag-assistant/node_modules/
+local-rag-assistant/dist/
+local-rag-assistant/.env
+
+# =========================
+# IDE
+# =========================
+
+.vscode/
+.idea/
+
+# =========================
+# OS files
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+# Logs
+# =========================
+
+*.log
