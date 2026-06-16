@@ -70,6 +70,7 @@ The system supports PDFs, DOCX files, TXT files, and image-based documents using
 * Persistent vector database
 
 ---
+## Retrieval
 
 ![Retrieval Results](screenshots/working.png)
 
