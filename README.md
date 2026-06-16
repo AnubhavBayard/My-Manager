@@ -6,6 +6,22 @@
 ![ChromaDB](https://img.shields.io/badge/VectorDB-ChromaDB-orange)
 ![Ollama](https://img.shields.io/badge/LLM-Qwen3%208B-purple)
 
+## Screenshots
+
+<table>
+<tr>
+<td align="center">
+<b>Chat Interface</b><br>
+<img src="screenshots/UI.png" width="100%">
+</td>
+
+<td align="center">
+<b>Upload Documents</b><br>
+<img src="screenshots/file-picker.png" width="100%">
+</td>
+</tr>
+</table>
+
 A local Retrieval-Augmented Generation (RAG) assistant that allows users to upload documents, index them into a vector database, and ask questions grounded in their own knowledge base.
 
 The system supports PDFs, DOCX files, TXT files, and image-based documents using OCR.
@@ -38,6 +54,7 @@ The system supports PDFs, DOCX files, TXT files, and image-based documents using
 * Markdown-formatted answers
 * Hallucination reduction through retrieval augmentation
 
+
 ### Frontend
 
 * React
@@ -53,6 +70,8 @@ The system supports PDFs, DOCX files, TXT files, and image-based documents using
 * Persistent vector database
 
 ---
+
+![Retrieval Results](screenshots/working.png)
 
 ## Architecture
 
