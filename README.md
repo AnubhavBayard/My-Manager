@@ -1,5 +1,11 @@
 # Local RAG Assistant
 
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green)
+![React](https://img.shields.io/badge/React-Frontend-blue)
+![ChromaDB](https://img.shields.io/badge/VectorDB-ChromaDB-orange)
+![Ollama](https://img.shields.io/badge/LLM-Qwen3%208B-purple)
+
 A local Retrieval-Augmented Generation (RAG) assistant that allows users to upload documents, index them into a vector database, and ask questions grounded in their own knowledge base.
 
 The system supports PDFs, DOCX files, TXT files, and image-based documents using OCR.
