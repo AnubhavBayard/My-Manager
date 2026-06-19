@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
+import { supabase } from "../lib/supabase";
 
 function formatTime(date) {
   return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -186,8 +187,21 @@ export default function ChatWindow({ fileCount = 0 }) {
     setLoading(true);
 
     try {
+      const {
+        data: { session }
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        throw new Error("No active session");
+      }
+
       const response = await fetch(
-        `http://127.0.0.1:8000/chat?query=${encodeURIComponent(userQuery)}`
+        `http://127.0.0.1:8000/chat?query=${encodeURIComponent(userQuery)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${session.access_token}`
+          }
+        }
       );
 
       const data = await response.json();

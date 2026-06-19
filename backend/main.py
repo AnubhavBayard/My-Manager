@@ -1,4 +1,5 @@
 import os
+import config
 from fastapi import FastAPI, UploadFile, File
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,6 +20,8 @@ except Exception as e:
 
 from services.retriever import retrieve
 from services.generator import generate_answer
+from fastapi import Depends
+from services.auth import get_current_user
 
 app = FastAPI()
 
@@ -40,42 +43,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def sync_uploads():
-
-    for filename in os.listdir(UPLOAD_DIR):
-        file_path = os.path.join(
-            UPLOAD_DIR,
-            filename
-        )
-
-        if not os.path.isfile(file_path):
-            continue
-
-        if already_indexed(filename):
-            continue
-
-        text = extract_text(file_path)
-
-        chunks = chunk_text(text)
-        
-        embeddings = create_embeddings(chunks)
-
-        store_embeddings(
-            chunks,
-            embeddings,
-            filename
-        )
-
-@app.on_event("startup")
-async def startup_event():
-    print("8 - startup entered")
-    sync_uploads()
-    print("9 - startup finished")
-
-
+@app.get("/me")
+async def me(
+    user=Depends(get_current_user)
+):
+    return {
+        "id": user.id,
+        "email": user.email
+    }
+    
 @app.post("/upload")
 async def upload_files(
-    files: List[UploadFile] = File(...)
+    files: List[UploadFile] = File(...),
+    user=Depends(get_current_user)
 ):
 
     results = []
@@ -122,7 +102,8 @@ async def upload_files(
         store_embeddings(
             chunks,
             embeddings,
-            file.filename
+            file.filename,
+            user.id
         )
 
         results.append({
@@ -137,15 +118,21 @@ async def upload_files(
 
 
 @app.get("/search")
-def search(query: str):
+def search(
+    query: str,    
+    user=Depends(get_current_user)
+):
 
-    return retrieve(query)
+    return retrieve(query, user.id)
 
 
 @app.get("/chat")
-def chat(query: str):
+def chat(
+    query: str,
+    user=Depends(get_current_user)
+):
 
-    chunks = retrieve(query)
+    chunks = retrieve(query, user.id)
 
     answer = generate_answer(
         query,

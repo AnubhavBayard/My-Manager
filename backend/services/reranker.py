@@ -9,6 +9,8 @@ def rerank_chunks(
     chunks,
     top_k=8
 ):
+    if not chunks:
+        return []
 
     pairs = [
         (

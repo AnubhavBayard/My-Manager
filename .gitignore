@@ -42,3 +42,9 @@ Thumbs.db
 # =========================
 
 *.log
+
+# Frontend
+local-rag-assistant/.env
+
+# Backend
+backend/.env
