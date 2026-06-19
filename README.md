@@ -9,16 +9,6 @@
 
 ---
 
-## Demo
-
-### 🎥 Demo Video
-
-> Add your deployment/demo video here.
-
-[Demo Video Link](YOUR_DEMO_VIDEO_LINK)
-
----
-
 ## Screenshots
 
 <table>
