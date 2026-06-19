@@ -16,6 +16,10 @@ env/
 .env
 .env.*
 
+# Python cache
+.pytest_cache/
+.mypy_cache/
+
 # =========================
 # ChromaDB
 # =========================
@@ -33,6 +37,7 @@ ocr_pages/
 <<<<<<< Updated upstream
 
 *.log
+<<<<<<< HEAD
 =======
 *.log
 
@@ -76,3 +81,5 @@ Thumbs.db
 *.sqlite3
 *.db
 >>>>>>> Stashed changes
+=======
+>>>>>>> new-model-branch
