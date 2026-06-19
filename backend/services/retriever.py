@@ -2,7 +2,7 @@ from services.embedder import model, collection
 from services.query_rewriter import generate_queries
 from services.reranker import rerank_chunks
 
-def retrieve(query, n_results=15):
+def retrieve(query, user_id, n_results=15):
 
     queries = generate_queries(query) or []
     
@@ -22,7 +22,10 @@ def retrieve(query, n_results=15):
 
         results = collection.query(
             query_embeddings=[query_embedding],
-            n_results=n_results
+            n_results=n_results,
+            where={
+                "user_id": user_id
+            }
         )
 
         for doc, meta in zip(
@@ -61,6 +64,9 @@ def retrieve(query, n_results=15):
         f"Retrieved {len(all_chunks)} chunks, "
         f"{len(unique_chunks)} after deduplication"
     )
+    
+    if not unique_chunks:
+        return []
 
     reranked_chunks = rerank_chunks(
         query,

@@ -41,7 +41,8 @@ def create_embeddings(chunks):
 def store_embeddings(
     chunks,
     embeddings,
-    file_name
+    file_name,
+    user_id
 ):
 
     collection.upsert(
@@ -60,6 +61,7 @@ def store_embeddings(
 
         metadatas=[
             {
+                "user_id": user_id,
                 "source": file_name,
                 "chunk_id": c["chunk_id"],
                 "chunk_size": c["chunk_size"],

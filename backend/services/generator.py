@@ -1,6 +1,11 @@
-from ollama import chat
+from groq import Groq
+import config
 
-MODEL_NAME = "qwen3:8b"
+client = Groq(
+    api_key=config.GROQ_API_KEY
+)
+
+MODEL_NAME = "llama-3.3-70b-versatile"
 
 def generate_answer(
     question,
@@ -13,34 +18,37 @@ def generate_answer(
     )
 
     prompt = f"""
-        You are a helpful document assistant.
+    You are a helpful document assistant.
 
-        Use ONLY the provided context.
+    Use ONLY the provided context.
 
-        Format your answers in clean Markdown:
+    Format your answers in clean Markdown:
 
-        - Use headings when appropriate
-        - Use bullet points
-        - Use numbered lists
-        - Keep answers easy to read
-        - Never write everything in one paragraph
-        
-        If you don't have the context then say so don't hallucinate.
+    - Use headings when appropriate
+    - Use bullet points
+    - Use numbered lists
+    - Keep answers easy to read
+    - Never write everything in one paragraph
 
-        Context:
-        {context}
+    If the answer is not contained in the context,
+    say so and do not hallucinate.
 
-        Question:
-        {question}
+    Context:
+    {context}
+
+    Question:
+    {question}
     """
 
-    response = chat(
+    response = client.chat.completions.create(
         model=MODEL_NAME,
         messages=[
-            {"role": "user", "content": prompt}
-        ]
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature=0.2
     )
-    
-    # print(prompt)
 
-    return response["message"]["content"]
+    return response.choices[0].message.content

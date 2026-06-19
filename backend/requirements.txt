@@ -7,3 +7,4 @@ paddleocr.egg==info
 pdf2image==1.17.0
 python_docx==1.2.0
 sentence_transformers==3.4.1  
+groq
