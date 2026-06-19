@@ -1,6 +1,11 @@
-from ollama import chat
+from groq import Groq
+import config
 
-MODEL_NAME = "qwen3:8b"
+client = Groq(
+    api_key=config.GROQ_API_KEY
+)
+
+MODEL_NAME = "llama-3.1-8b-instant"
 
 def generate_queries(query):
 
@@ -25,7 +30,7 @@ QUERY:
 ...
 """
 
-    response = chat(
+    response = client.chat.completions.create(
         model=MODEL_NAME,
         messages=[
             {
@@ -35,7 +40,7 @@ QUERY:
         ]
     )
 
-    queries = response["message"]["content"]
+    queries = response.choices[0].message.content
 
     return [
         q.strip()

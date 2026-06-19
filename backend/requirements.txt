@@ -1,10 +1,11 @@
 chromadb==1.5.9
-fastapi==0.137.0
+fastapi==0.137.2
 fitz==0.0.1.dev2
-ollama==0.6.2
+groq==1.4.0
 paddleocr==2.8.1
 paddleocr.egg==info
 pdf2image==1.17.0
+python-dotenv==1.2.2
 python_docx==1.2.0
-sentence_transformers==3.4.1  
-groq
+sentence_transformers==3.4.1
+supabase==2.31.0
