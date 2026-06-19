@@ -1,44 +1,78 @@
 # =========================
-# Backend
+# Python
 # =========================
-
-backend/venv/
-backend/__pycache__/
-backend/uploads/
-backend/chroma_db/
-backend/.env
-
-*.pyc
+__pycache__/
+*.py[cod]
 *.pyo
+*.pyd
+*.so
 
-# PaddleOCR / PaddleX caches
-.paddleocr/
-.paddlex/
+# Virtual Environments
+venv/
+.venv/
+env/
 
-# =========================
-# Frontend (Vite)
-# =========================
-
-local-rag-assistant/node_modules/
-local-rag-assistant/dist/
-local-rag-assistant/.env
-
-# =========================
-# IDE
-# =========================
-
-.vscode/
-.idea/
+# Environment Variables
+.env
+.env.*
 
 # =========================
-# OS files
+# ChromaDB
 # =========================
+chroma_db/
 
-.DS_Store
-Thumbs.db
+# =========================
+# Uploads
+# =========================
+uploads/
+ocr_pages/
 
 # =========================
 # Logs
 # =========================
+<<<<<<< Updated upstream
 
 *.log
+=======
+*.log
+
+# =========================
+# FastAPI / Python Cache
+# =========================
+.pytest_cache/
+.mypy_cache/
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# Node / React
+# =========================
+node_modules/
+dist/
+build/
+
+# npm logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Render / Deployment
+# =========================
+.render/
+
+# =========================
+# Misc
+# =========================
+*.sqlite3
+*.db
+>>>>>>> Stashed changes
