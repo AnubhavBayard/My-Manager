@@ -15,6 +15,10 @@ backend/.env
 .paddleocr/
 .paddlex/
 
+# Python cache
+.pytest_cache/
+.mypy_cache/
+
 # =========================
 # Frontend (Vite)
 # =========================
@@ -42,9 +46,3 @@ Thumbs.db
 # =========================
 
 *.log
-
-# Frontend
-local-rag-assistant/.env
-
-# Backend
-backend/.env
