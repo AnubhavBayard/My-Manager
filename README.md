@@ -333,9 +333,25 @@ cd My-Manager
 cd backend
 
 python -m venv venv
+```
 
+#### Activate Virtual Environment
+
+**Windows**
+
+```bash
 venv\Scripts\activate
+```
 
+**macOS / Linux**
+
+```bash
+source venv/bin/activate
+```
+
+#### Install Dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
@@ -367,10 +383,18 @@ npm run dev
 
 ### Run Backend
 
+Make sure the virtual environment is activated.
+
 ```bash
 cd backend
 
 uvicorn main:app --reload
+```
+
+Backend will be available at:
+
+```text
+http://127.0.0.1:8000
 ```
 
 ---
@@ -388,6 +412,30 @@ uvicorn main:app --reload
 * Conversation Memory
 
 ---
+
+## Deployment Note
+
+This project was originally designed as a local-first RAG system using ChromaDB, PaddleOCR, Sentence Transformers, and Groq.
+
+While the application runs fully locally, deploying large OCR and embedding models on free cloud infrastructure can be memory-intensive. The current architecture is therefore being evolved toward a more production-oriented stack using:
+
+* Supabase Authentication
+* Supabase Storage
+* PostgreSQL + pgvector
+* Groq API
+* FastAPI
+* React
+
+This migration will provide:
+
+* Better scalability
+* Persistent cloud storage
+* Lower server memory usage
+* Improved deployment experience
+* Production-ready vector search
+
+The current implementation demonstrates the complete Retrieval-Augmented Generation (RAG) pipeline including OCR, semantic search, query rewriting, reranking, and grounded answer generation.
+
 
 ## Author
 
