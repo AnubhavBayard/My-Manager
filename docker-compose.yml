@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    # volumes:
+      # Syncs your local code to the container so --reload works
+      # - ./backend:/app
+      # Prevents local __pycache__ from breaking things
+      # - /app/__pycache__
+    env_file:
+      - ./backend/.env
+
+  frontend:
+    build: ./local-rag-assistant
+    ports:
+      - "3000:80" # Access the Nginx frontend at localhost:3000
+    env_file:
+      - ./local-rag-assistant/.env
+    depends_on:
+      - backend
