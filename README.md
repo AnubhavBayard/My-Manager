@@ -1,406 +1,345 @@
-# My Manager – AI-Powered Personal Knowledge Assistant
+# 🤖 My Manager – AI-Powered Personal Knowledge Assistant
 
-![Python](https://img.shields.io/badge/Python-3.11-blue)
-![FastAPI](https://img.shields.io/badge/FastAPI-Backend-green)
-![React](https://img.shields.io/badge/React-Frontend-blue)
-![Supabase](https://img.shields.io/badge/Auth-Supabase-success)
-![ChromaDB](https://img.shields.io/badge/VectorDB-ChromaDB-orange)
-![RAG](https://img.shields.io/badge/AI-RAG-purple)
+<div align="center">
+
+![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+![ChromaDB](https://img.shields.io/badge/ChromaDB-FF6F00?style=for-the-badge&logo=databricks&logoColor=white)
+![Groq](https://img.shields.io/badge/Groq%20API-F05032?style=for-the-badge&logo=git&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+
+<p align="center">
+  <b>A private, enterprise-grade Retrieval-Augmented Generation (RAG) assistant for personal documents, certificates, scanned images, and notes.</b>
+</p>
+
+[Key Features](#-key-features) •
+[Architecture](#-system-architecture) •
+[Getting Started](#-getting-started-run-from-github) •
+[API Reference](#-api-reference) •
+[Docker Deployment](#-docker-deployment)
+
+</div>
 
 ---
 
-## Screenshots
+## 📸 Interface Preview
+
+<div align="center">
 
 <table>
-<tr>
-<td align="center">
-<b>Chat Interface</b><br>
-<img src="screenshots/UI.png" width="100%">
-</td>
-
-<td align="center">
-<b>Upload Documents</b><br>
-<img src="screenshots/file-picker.png" width="100%">
-</td>
-</tr>
+  <tr>
+    <td align="center" width="50%">
+      <b>💬 AI Chat & Source Attribution</b><br><br>
+      <img src="screenshots/UI.png" alt="Chat UI" width="100%">
+    </td>
+    <td align="center" width="50%">
+      <b>📁 Multi-Format Document Ingestion</b><br><br>
+      <img src="screenshots/file-picker.png" alt="Upload Documents" width="100%">
+    </td>
+  </tr>
 </table>
 
----
+### 🔄 Multi-Stage Retrieval & RAG Pipeline
 
-## Retrieval Pipeline
+<img src="screenshots/working.png" alt="RAG Pipeline Flow" width="100%">
 
-<img src="screenshots/working.png" width="100%">
-
----
-
-## Overview
-
-My Manager is a Retrieval-Augmented Generation (RAG) application that enables users to build a private AI-powered knowledge base from their own documents.
-
-Users can upload documents, scanned PDFs, certificates, notes, reports, images, and other files, then ask natural language questions grounded in the uploaded content.
-
-The system combines OCR, semantic search, query expansion, reranking, and LLM-powered answer generation to provide accurate, context-aware responses.
+</div>
 
 ---
 
-## Features
+## 📌 Overview
 
-### 🔐 Authentication & Security
+**My Manager** is a full-stack, local-first Retrieval-Augmented Generation (RAG) system that converts your documents into an interactive, private AI knowledge base.
 
-* Supabase Authentication
-* Email & Password Login
-* JWT Verification in FastAPI
-* User-Specific Knowledge Bases
-* Protected API Endpoints
-* Secure Document Isolation
+Upload PDFs, scanned certificates, text notes, DOCX files, and images—the pipeline extracts text via native parsers or OCR (PaddleOCR), generates high-density semantic vector embeddings, stores them in ChromaDB with user-level isolation, expands user queries using LLM-driven query rewriting, re-ranks contexts via a cross-encoder model, and synthesizes answers via Groq LLMs with source citations.
 
 ---
 
-### 📄 Document Processing
+## ✨ Key Features
 
-Supported file types:
-
-| Type | Supported |
-| ---- | --------- |
-| PDF  | ✅         |
-| DOCX | ✅         |
-| TXT  | ✅         |
-| PNG  | ✅         |
-| JPG  | ✅         |
-| JPEG | ✅         |
-| WEBP | ✅         |
-
-Capabilities:
-
-* PDF Text Extraction
-* DOCX Parsing
-* TXT Parsing
-* Direct Image OCR
-* OCR Fallback for Scanned PDFs
-* Automatic Document Synchronization
+### 🔐 Multi-User Authentication & Security
+* **Supabase Auth & JWT Middleware**: Secure user registration, sign-in, and token-based FastAPI route guards.
+* **User-Isolated Storage**: Every document chunk in ChromaDB is tagged with the user's `user_id`, ensuring strict tenant isolation and zero data leak across accounts.
 
 ---
 
-### 🔍 OCR Pipeline
-
-Powered by PaddleOCR.
-
-Features:
-
-* Scanned PDF Support
-* Image Text Extraction
-* Certificate Recognition
-* Multi-Page OCR Processing
+### 📄 Multi-Format Ingestion & Intelligent Parsing
+* **Supported Formats**: `.pdf`, `.docx`, `.txt`, `.png`, `.jpg`, `.jpeg`, `.webp`.
+* **PaddleOCR Integration**: Automatically processes scanned PDFs, certificates, receipts, and images when text extraction yields empty content.
+* **Automatic Document Chunking**: Uses recursive character splitting with tuned overlap to preserve semantic context across chunk boundaries.
 
 ---
 
-### 🧠 Retrieval Pipeline
+### 🧠 Advanced RAG Retrieval Pipeline
+1. **Dense Vector Embeddings**: Utilizes state-of-the-art HuggingFace embeddings (`BAAI/bge-base-en-v1.5`).
+2. **Query Expansion & Rewriting**: Uses LLM prompt engineering to rewrite incoming user queries into multiple semantic variations, drastically improving recall for complex or ambiguous queries.
+3. **Multi-Query Vector Retrieval**: Queries ChromaDB across all query variations simultaneously.
+4. **Cross-Encoder Re-Ranking**: Employs `cross-encoder/ms-marco-MiniLM-L-6-v2` to re-score and re-rank top vector hits, ensuring only highly relevant context reaches the LLM context window.
 
-#### Chunking
+---
 
-* Recursive Character Text Splitting
-* Chunk Overlap Support
-* Metadata Preservation
+### 🤖 Grounded Answer Generation
+* **Groq API Acceleration**: High-speed LLM inference powered by Groq (`openai/gpt-oss-20b` or custom Groq models).
+* **Source Citation & Attribution**: Returns exact source filenames alongside generated answers, enabling transparent verification of information.
+* **Hallucination Prevention**: Prompting strategies require answers to be strictly grounded in the retrieved document chunks.
 
-#### Embeddings
+---
 
-Embedding Model:
+### 💻 Modern Frontend Experience
+* **React 18 + Vite**: Lightning-fast UI rendering with hot module replacement (HMR).
+* **Clean UI Design**: Sleek dark/light styled components, source tags, real-time response generation feedback, and modal file uploaders.
+
+---
+
+## 🏗 System Architecture
 
 ```text
-BAAI/bge-base-en-v1.5
-```
-
-#### Vector Search
-
-* ChromaDB Persistent Vector Store
-* Semantic Similarity Search
-* User-Specific Retrieval
-
-#### Query Enhancement
-
-* Query Rewriting
-* Multi-Query Retrieval
-
-Example:
-
-```text
-Original Query:
-Do I have any certificates?
-
-Generated Queries:
-What certifications are available?
-Any uploaded certificates?
-Professional credentials in my documents?
-Certification-related documents?
-```
-
-#### Re-Ranking
-
-Cross Encoder:
-
-```text
-cross-encoder/ms-marco-MiniLM-L-6-v2
-```
-
-Features:
-
-* Cross-Encoder Re-ranking
-* Top-K Context Selection
-* Improved Retrieval Accuracy
-
----
-
-### 🤖 Answer Generation
-
-Features:
-
-* Retrieval-Augmented Generation (RAG)
-* Context-Grounded Responses
-* Markdown Formatting
-* Source Attribution
-* Hallucination Reduction
-
-LLM Provider:
-
-```text
-Groq API
+                        ┌────────────────────────┐
+                        │      User Interface    │
+                        │     (React + Vite)     │
+                        └───────────┬────────────┘
+                                    │ HTTP / JWT Auth
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           FastAPI Backend                               │
+│                                                                         │
+│  ┌──────────────────────┐        ┌───────────────────────────────────┐  │
+│  │ Document Extractor   ├───────►│ Chunker & Embedding Pipeline     │  │
+│  │ (PDF/DOCX/TXT/OCR)   │        │ (BAAI/bge-base-en-v1.5)           │  │
+│  └──────────────────────┘        └─────────────────┬─────────────────┘  │
+│                                                    │                    │
+│                                                    ▼                    │
+│                                   ┌───────────────────────────────────┐ │
+│                                   │       ChromaDB Vector Store       │ │
+│                                   │    (User Metadata Isolated)       │ │
+│                                   └─────────────────┬─────────────────┘ │
+│                                                     │                   │
+│  ┌──────────────────────┐        ┌──────────────────┴────────────────┐  │
+│  │   Query Rewriter     ├───────►│ Cross-Encoder Re-Ranker          │  │
+│  │ (Multi-Query Expansion)      │ (ms-marco-MiniLM-L-6-v2)          │  │
+│  └──────────────────────┘        └──────────────────┬────────────────┘  │
+│                                                     │                   │
+│                                                     ▼                   │
+│                                  ┌────────────────────────────────────┐ │
+│                                  │      Groq LLM Generation           │ │
+│                                  └──────────────────┬─────────────────┘ │
+└─────────────────────────────────────────────────────┼───────────────────┘
+                                                      │ Grounded Response
+                                                      ▼ + Citations
+                                          ┌───────────────────────┐
+                                          │      User Interface   │
+                                          └───────────────────────┘
 ```
 
 ---
 
-### 💻 Frontend
-
-Built with:
-
-* React
-* Vite
-
-Features:
-
-* Modern Chat Interface
-* Authentication Workflow
-* File Upload System
-* Source Attribution Display
-* Responsive Design
-
----
-
-### ⚙️ Backend
-
-Built with:
-
-* FastAPI
-* Supabase
-* ChromaDB
-* Sentence Transformers
-
-Features:
-
-* REST API
-* JWT Verification
-* OCR Pipeline
-* Vector Search
-* Retrieval Orchestration
-* User-Aware Document Retrieval
-
----
-
-## Architecture
+## 📁 Repository Structure
 
 ```text
-User Login
-        ↓
-Document Upload
-        ↓
-Text Extraction
-        ↓
-OCR (if required)
-        ↓
-Chunking
-        ↓
-Embeddings
-        ↓
-ChromaDB
-        ↓
-Query Rewriting
-        ↓
-Multi-Query Retrieval
-        ↓
-Cross-Encoder Re-ranking
-        ↓
-Groq LLM
-        ↓
-Grounded Answer
+My-Manager/
+├── backend/                        # FastAPI Backend Application
+│   ├── services/                   # Modular Pipeline Services
+│   │   ├── auth.py                 # Supabase JWT Authentication Guard
+│   │   ├── chunker.py              # Recursive Text Splitting Logic
+│   │   ├── embedder.py             # BGE Embedding & ChromaDB Store Operations
+│   │   ├── extractor.py            # Document Parsers (PDF, DOCX, TXT, OCR)
+│   │   ├── generator.py            # Groq LLM Answer Synthesis & Prompting
+│   │   ├── ocr.py                  # PaddleOCR Text Extraction Engine
+│   │   ├── query_rewriter.py       # LLM Query Expansion Service
+│   │   ├── reranker.py             # Cross-Encoder Context Re-ranking
+│   │   └── retriever.py            # Vector & Pipeline Orchestrator
+│   ├── chroma_db/                  # Local Chroma Vector Database Store
+│   ├── uploads/                    # Uploaded Document Storage Directory
+│   ├── config.py                   # Environment Configuration Loader
+│   ├── main.py                     # FastAPI Application Routes & Middleware
+│   ├── requirements.txt            # Python Dependencies
+│   └── Dockerfile                  # Container build file for backend
+├── local-rag-assistant/            # Frontend React Application
+│   ├── src/                        # React Components, Hooks, API Services
+│   ├── public/                     # Static Web Assets
+│   ├── package.json                # Frontend Dependencies & Scripts
+│   ├── vite.config.js              # Vite Build Configuration
+│   └── Dockerfile                  # Container build file for frontend
+├── screenshots/                    # UI & Architecture Showcase Images
+│   ├── UI.png                      # Chat Interface Screenshot
+│   ├── file-picker.png             # Upload Modal Screenshot
+│   └── working.png                 # System Diagram
+├── docker-compose.yml              # Multi-container Orchestration File
+├── README.md                       # Main Project Documentation (New)
+└── README_OLD.md                   # Preserved Legacy Documentation Reference
 ```
 
 ---
 
-## Tech Stack
+## 🚀 Getting Started (Run from GitHub)
 
-### Frontend
+Follow these step-by-step instructions to clone, configure, and launch the project on your local machine.
 
-* React
-* Vite
-* JavaScript
+### 📋 Prerequisites
 
-### Backend
-
-* FastAPI
-* Python
-* ChromaDB
-* Supabase Auth
-* JWT Verification
-
-### AI & NLP
-
-* Sentence Transformers
-* PaddleOCR
-* Query Rewriting
-* Multi-Query Retrieval
-* Cross-Encoder Re-ranking
-
-### Models
-
-#### Embedding Model
-
-```text
-BAAI/bge-base-en-v1.5
-```
-
-#### Re-Ranking Model
-
-```text
-cross-encoder/ms-marco-MiniLM-L-6-v2
-```
-
-#### LLM
-
-```text
-Groq API
-```
+Ensure you have the following installed on your system:
+* **Git**: [Install Git](https://git-scm.com/)
+* **Python**: `3.11` or higher ([Download Python](https://www.python.org/))
+* **Node.js**: `18.0.0` or higher & `npm` ([Download Node.js](https://nodejs.org/))
+* **Supabase Account**: Free project setup at [Supabase](https://supabase.com/)
+* **Groq API Key**: Free API key at [Groq Console](https://console.groq.com/)
+* *(Optional)* **Docker & Docker Compose**: [Install Docker Desktop](https://www.docker.com/)
 
 ---
 
-## API Endpoints
+### 1️⃣ Clone the Repository
 
-### Authentication
-
-#### GET /me
-
-Returns authenticated user information.
-
----
-
-### Upload Documents
-
-#### POST /upload
-
-Uploads and indexes one or more documents into the user's private knowledge base.
-
----
-
-### Search
-
-#### GET /search
-
-Returns the most relevant chunks for a query.
-
----
-
-### Chat
-
-#### GET /chat
-
-Generates a grounded response using retrieved context.
-
----
-
-## Installation
-
-### Clone Repository
+Open your terminal and run:
 
 ```bash
 git clone https://github.com/AnubhavBayard/My-Manager.git
-
 cd My-Manager
 ```
 
 ---
 
-### Backend Setup
+### 2️⃣ Option A: Local Development Setup (Manual)
+
+#### Step 1: Configure Backend Environment Variables
+
+Navigate to the `backend/` folder and create a `.env` file:
 
 ```bash
 cd backend
+```
 
-python -m venv venv
+Create a `.env` file with the following variables:
 
-venv\Scripts\activate
+```env
+SUPABASE_URL=https://your-supabase-project-id.supabase.co
+SUPABASE_ANON_KEY=your_supabase_anon_key
+GROQ_API_KEY=gsk_your_groq_api_key_here
+GROQ_MODEL=openai/gpt-oss-20b
+```
 
+#### Step 2: Set Up Python Virtual Environment & Install Dependencies
+
+On Linux/macOS:
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
----
-
-### Backend Environment Variables
-
-Create a `.env` file inside the backend folder:
-
-```env
-SUPABASE_URL=YOUR_SUPABASE_URL
-SUPABASE_KEY=YOUR_SUPABASE_KEY
-GROQ_API_KEY=YOUR_GROQ_API_KEY
+On Windows:
+```cmd
+python -m venv venv
+venv\Scripts\activate
+pip install --upgrade pip
+pip install -r requirements.txt
 ```
 
+#### Step 3: Launch Backend Server
+
+```bash
+uvicorn main:app --reload --host 127.0.0.1 --port 8000
+```
+> The FastAPI backend will start at `http://127.0.0.1:8000` (API documentation available at `http://127.0.0.1:8000/docs`).
+
 ---
 
-### Frontend Setup
+#### Step 4: Configure Frontend Environment Variables
+
+Open a new terminal window, navigate to the `local-rag-assistant/` directory:
 
 ```bash
 cd local-rag-assistant
+```
 
+Create a `.env` file:
+
+```env
+VITE_SUPABASE_URL=https://your-supabase-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+#### Step 5: Install Frontend Dependencies & Start Server
+
+```bash
 npm install
-
 npm run dev
 ```
 
+> The Vite dev server will start at `http://localhost:5173`. Open this URL in your web browser!
+
 ---
 
-### Run Backend
+### 3️⃣ Option B: Quick Start with Docker Compose
+
+Alternatively, you can run both backend and frontend in Docker containers with a single command.
+
+1. Ensure `.env` files are configured in both `backend/.env` and `local-rag-assistant/.env`.
+2. From the project root directory, run:
 
 ```bash
-cd backend
-
-uvicorn main:app --reload
+docker-compose up --build
 ```
 
----
-
-## Future Improvements
-
-* Hybrid Search (BM25 + Vector Search)
-* Chat History Persistence
-* Supabase pgvector Migration
-* Streaming Responses
-* Citation Highlighting
-* Parent Document Retrieval
-* Docker Deployment
-* Cloud Deployment
-* Conversation Memory
+3. Access services:
+   - **Frontend App**: `http://localhost:3000`
+   - **Backend API**: `http://localhost:8000`
 
 ---
 
-## Author
+## 🔌 API Reference
 
-### Anubhav Bayard
+### Authentication Guard
 
-Built as a full-stack AI application combining:
+All protected routes accept a `Authorization: Bearer <SUPABASE_JWT_TOKEN>` header.
 
-* OCR
-* Semantic Search
-* Query Rewriting
-* Multi-Query Retrieval
-* Cross-Encoder Re-ranking
-* Authentication
-* Retrieval-Augmented Generation (RAG)
+| Endpoint | Method | Description | Auth Required |
+| :--- | :--- | :--- | :--- |
+| `/me` | `GET` | Validates JWT token and returns authenticated user profile | Yes |
+| `/upload` | `POST` | Ingests multi-file payloads (PDF, DOCX, TXT, Images), runs OCR/Chunking/Embedding, and stores chunks | Yes |
+| `/search` | `GET` | Performs vector search with query rewriting and cross-encoder re-ranking; returns raw chunks | Yes |
+| `/chat` | `GET` | Executes full RAG pipeline, generating grounded response with source citations | Yes |
 
-Designed as a private AI-powered personal knowledge assistant.
+---
+
+## 🛠 Tech Stack Summary
+
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend Framework** | React 18, Vite, JavaScript (ES6+), HTML5, CSS3 |
+| **Backend Framework** | Python 3.11+, FastAPI, Uvicorn, Pydantic |
+| **Authentication** | Supabase Auth, PyJWT, Security Bearer Tokens |
+| **Document Parsers** | PyPDF2, python-docx, PaddleOCR, Pillow |
+| **Vector Database** | ChromaDB (Persistent Disk Store) |
+| **Embedding Model** | `BAAI/bge-base-en-v1.5` via `sentence-transformers` |
+| **Re-Ranker Model** | `cross-encoder/ms-marco-MiniLM-L-6-v2` |
+| **LLM Engine** | Groq API (`openai/gpt-oss-20b`) |
+| **Containerization** | Docker, Docker Compose, Nginx |
+
+---
+
+## 🔮 Future Enhancements & Roadmap
+
+- [ ] **Hybrid Search Integration**: Combine BM25 keyword matching with dense vector retrieval.
+- [ ] **Persistent Chat History**: Store conversation memory in Supabase PostgreSQL database.
+- [ ] **Streaming LLM Responses**: Implement Server-Sent Events (SSE) or WebSockets for real-time text streaming.
+- [ ] **PDF Preview with Citation Highlighting**: Deep-link source citations directly to highlighted PDF pages.
+- [ ] **Supabase pgvector Migration**: Cloud vector database support for large scale production deployments.
+
+---
+
+## 📜 Preserved Original README
+
+If you wish to view the original repository README file for historical context or comparison, it has been preserved in [README_OLD.md](file:///media/beast/New%20Volume/My%20Manager/README_OLD.md).
+
+---
+
+## 👤 Author & Acknowledgments
+
+**Anubhav Bayard**  
+- GitHub: [@AnubhavBayard](https://github.com/AnubhavBayard)
+
+*Built with passion as an advanced open-source AI knowledge assistant.*
