@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { supabase } from "../lib/supabase";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
 function formatTime(date) {
   return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
@@ -196,7 +198,7 @@ export default function ChatWindow({ fileCount = 0 }) {
       }
 
       const response = await fetch(
-        `http://127.0.0.1:8000/chat?query=${encodeURIComponent(userQuery)}`,
+        `${API_URL}/chat?query=${encodeURIComponent(userQuery)}`,
         {
           headers: {
             Authorization: `Bearer ${session.access_token}`
@@ -222,7 +224,7 @@ export default function ChatWindow({ fileCount = 0 }) {
         ...prev,
         {
           role: "assistant",
-          content: "Something went wrong. Make sure the backend is running at http://127.0.0.1:8000.",
+          content: `Something went wrong. Make sure the backend is running at ${API_URL}.`,
           time: new Date(),
         },
       ]);
