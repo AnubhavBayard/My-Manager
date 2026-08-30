@@ -1,10 +1,13 @@
 from fastapi import Header, HTTPException
 from supabase import create_client
-import os
+import config
+
+supabase_url = config.SUPABASE_URL or os.getenv("SUPABASE_URL")
+supabase_key = config.SUPABASE_KEY or os.getenv("SUPABASE_ANON_KEY") or os.getenv("SUPABASE_KEY")
 
 supabase = create_client(
-    os.getenv("SUPABASE_URL"),
-    os.getenv("SUPABASE_ANON_KEY")
+    supabase_url,
+    supabase_key
 )
 
 async def get_current_user(
