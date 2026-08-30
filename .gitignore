@@ -20,6 +20,7 @@ env/
 # Python Cache & Testing
 .pytest_cache/
 .mypy_cache/
+.cache/
 
 # =========================
 # ChromaDB & Vector Store

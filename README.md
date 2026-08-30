@@ -201,92 +201,57 @@ cd My-Manager
 
 ---
 
-### 2️⃣ Option A: Local Development Setup (Manual)
+### 2️⃣ Option A: Quick Start with Docker Compose (Recommended)
 
-#### Step 1: Configure Backend Environment Variables
+Run the full stack with isolated containers in a single command.
 
-Navigate to the `backend/` folder and create a `.env` file:
-
-```bash
-cd backend
-```
-
-Create a `.env` file with the following variables:
-
-```env
-SUPABASE_URL=https://your-supabase-project-id.supabase.co
-SUPABASE_ANON_KEY=your_supabase_anon_key
-GROQ_API_KEY=gsk_your_groq_api_key_here
-GROQ_MODEL=openai/gpt-oss-20b
-```
-
-#### Step 2: Set Up Python Virtual Environment & Install Dependencies
-
-On Linux/macOS:
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-On Windows:
-```cmd
-python -m venv venv
-venv\Scripts\activate
-pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-#### Step 3: Launch Backend Server
+#### Step 1: Create Environment Files
+Copy the `.env.example` templates in both services to `.env`:
 
 ```bash
-uvicorn main:app --reload --host 127.0.0.1 --port 8000
-```
-> The FastAPI backend will start at `http://127.0.0.1:8000` (API documentation available at `http://127.0.0.1:8000/docs`).
+# Backend configuration
+cp backend/.env.example backend/.env
 
----
-
-#### Step 4: Configure Frontend Environment Variables
-
-Open a new terminal window, navigate to the `local-rag-assistant/` directory:
-
-```bash
-cd local-rag-assistant
+# Frontend configuration
+cp local-rag-assistant/.env.example local-rag-assistant/.env
 ```
 
-Create a `.env` file:
+Edit `backend/.env` with your Supabase credentials (`SUPABASE_URL`, `SUPABASE_KEY`) and Groq API key (`GROQ_API_KEY`).
+Edit `local-rag-assistant/.env` with your Supabase frontend credentials (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`).
 
-```env
-VITE_SUPABASE_URL=https://your-supabase-project-id.supabase.co
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
+#### Step 2: Build and Run Containers
 
-#### Step 5: Install Frontend Dependencies & Start Server
-
-```bash
-npm install
-npm run dev
-```
-
-> The Vite dev server will start at `http://localhost:5173`. Open this URL in your web browser!
-
----
-
-### 3️⃣ Option B: Quick Start with Docker Compose
-
-Alternatively, you can run both backend and frontend in Docker containers with a single command.
-
-1. Ensure `.env` files are configured in both `backend/.env` and `local-rag-assistant/.env`.
-2. From the project root directory, run:
+From the project root directory, run:
 
 ```bash
 docker-compose up --build
 ```
 
-3. Access services:
-   - **Frontend App**: `http://localhost:3000`
-   - **Backend API**: `http://localhost:8000`
+#### Step 3: Access the Application
+* **Frontend App**: `http://localhost:3000`
+* **Backend API**: `http://localhost:8000` (API documentation at `http://localhost:8000/docs`)
+
+---
+
+### 3️⃣ Option B: Local Development Setup (Manual)
+
+If you prefer to run services manually without Docker:
+
+#### Step 1: Backend Setup
+```bash
+cd backend
+cp .env.example .env # edit with your keys
+pip install -r requirements.txt
+uvicorn main:app --reload --host 127.0.0.1 --port 8000
+```
+
+#### Step 2: Frontend Setup
+```bash
+cd local-rag-assistant
+cp .env.example .env # edit with your keys
+npm install
+npm run dev
+```
 
 ---
 
